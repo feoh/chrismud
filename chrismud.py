@@ -1,6 +1,7 @@
 from sqlmodel import SQLModel, create_engine, Session
 from fastapi import FastAPI
-from models import Player, Thing
+from models.player import Player
+from models.thing import Thing
 
 sqlite_file_name='chrismud.db'
 sqlite_url='sqlite:///' + sqlite_file_name
