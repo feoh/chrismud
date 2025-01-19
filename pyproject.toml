@@ -1,0 +1,10 @@
+[project]
+name = "chrismud"
+version = "0.1.0"
+description = "An HTTP based multi user dungeon?"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi[extras,standard]>=0.115.6",
+    "sqlmodel>=0.0.22",
+]
