@@ -20,12 +20,15 @@ def create_player(player_name: str):
         player = Player(name=player_name)
         session.add(player)
         session.commit()
+        return player.id
+
 @app.get("/player/delete/{player_id}")
 def delete_player(player_id: int):
     with Session(engine) as session:
         player = session.get(Player, player_id)
         session.delete(player)
         session.commit()
+
 
 @app.get("/player/get/{player_id}")
 def get_player(player_id: int):
@@ -39,6 +42,7 @@ def create_thing(thing_name: str):
         thing = Thing(name=thing_name)
         session.add(thing)
         session.commit()
+        return thing.id
 
 @app.get("/thing/get/{thing_id}")
 def get_thing(thing_id: int):
