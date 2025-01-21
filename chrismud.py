@@ -2,6 +2,7 @@ from sqlmodel import SQLModel, create_engine, Session
 from fastapi import FastAPI
 from models.player import Player
 from models.thing import Thing
+import uuid
 
 sqlite_file_name='chrismud.db'
 sqlite_url='sqlite:///' + sqlite_file_name
@@ -22,8 +23,14 @@ def create_player(player_name: str):
         session.commit()
         return player.id
 
+@app.get("/player/list")
+def list_players():
+    with Session(engine) as session:
+        players = session.query(Player).all()
+        return players
+
 @app.get("/player/delete/{player_id}")
-def delete_player(player_id: int):
+def delete_player(player_id: uuid.UUID):
     with Session(engine) as session:
         player = session.get(Player, player_id)
         session.delete(player)
@@ -31,7 +38,7 @@ def delete_player(player_id: int):
 
 
 @app.get("/player/get/{player_id}")
-def get_player(player_id: int):
+def get_player(player_id: uuid.UUID):
     with Session(engine) as session:
         player = session.get(Player, player_id)
         return player
@@ -45,7 +52,7 @@ def create_thing(thing_name: str):
         return thing.id
 
 @app.get("/thing/get/{thing_id}")
-def get_thing(thing_id: int):
+def get_thing(thing_id: uuid.UUID):
     with Session(engine) as session:
         thing = session.get(Thing, thing_id)
         return thing

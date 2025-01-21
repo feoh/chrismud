@@ -4,5 +4,5 @@ import uuid
 class   Player(SQLModel, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     name: str
-    # location: str | None = None
+    location: str | None = None
 
