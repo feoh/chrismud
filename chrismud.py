@@ -5,17 +5,17 @@ from models.thing import Thing
 from models.location import Location
 import uuid
 
-sqlite_file_name='chrismud.db'
-sqlite_url='sqlite:///' + sqlite_file_name
 
-engine = create_engine(sqlite_url, echo=True)
+def initialize_database():
+    sqlite_file_name='chrismud.db'
+    sqlite_url='sqlite:///' + sqlite_file_name
 
-SQLModel.metadata.create_all(engine)
+    engine = create_engine(sqlite_url, echo=True)
 
-app = FastAPI()
+    SQLModel.metadata.create_all(engine)
+    return engine
 
-
-def initialize_world():
+def initialize_world(engine):
     with Session(engine) as session:
         # Create the Limbo location
         player = Player(name="Wizard")
@@ -34,6 +34,8 @@ def initialize_world():
         session.add(limbo)
         session.commit()
 
+
+app = FastAPI()
 
 @app.post("/player/create/{player_name}")
 def create_player(player_name: str):
@@ -102,4 +104,9 @@ def create_location(location_name: str, description: str):
         session.add(location)
         session.commit()
         return location.id
+
+if __name__ == "__main__":
+    engine = initialize_database()
+    initialize_world(engine)
+
 
