@@ -7,8 +7,6 @@ import uuid
 sqlite_file_name='chrismud.db'
 sqlite_url='sqlite:///' + sqlite_file_name
 
-engine = create_engine(sqlite_url)
-
 engine = create_engine(sqlite_url, echo=True)
 
 SQLModel.metadata.create_all(engine)
