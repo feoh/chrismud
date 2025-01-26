@@ -5,6 +5,4 @@ class   Location(SQLModel, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     name: str = Field(unique=True)
     description: str
-#    exits: List[uuid.UUID] = []
-#    players_here: List[uuid.UUID] = []
 

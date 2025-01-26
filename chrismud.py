@@ -14,6 +14,7 @@ SQLModel.metadata.create_all(engine)
 
 app = FastAPI()
 
+
 def initialize_world():
     with Session(engine) as session:
         # Create the Limbo location
