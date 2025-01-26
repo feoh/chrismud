@@ -1,4 +1,4 @@
-from sqlmodel import SQLModel, create_engine, Session
+from sqlmodel import SQLModel, create_engine, Session, select
 from fastapi import FastAPI
 from models.player import Player
 from models.thing import Thing
@@ -26,8 +26,10 @@ def create_player(player_name: str):
 @app.get("/player/list")
 def list_players():
     with Session(engine) as session:
-        players = session.query(Player).all()
-        return players
+        statement = select(Player)
+        players = session.exec(statement)
+        return players.all()
+
 
 @app.get("/player/delete/{player_id}")
 def delete_player(player_id: uuid.UUID):
@@ -35,6 +37,7 @@ def delete_player(player_id: uuid.UUID):
         player = session.get(Player, player_id)
         session.delete(player)
         session.commit()
+        return(player_id)
 
 
 @app.get("/player/get/{player_id}")
@@ -50,6 +53,14 @@ def create_thing(thing_name: str):
         session.add(thing)
         session.commit()
         return thing.id
+
+@app.get("/thing/delete/{thing_id}")
+def delete_thing(thing_id: uuid.UUID):
+    with Session(engine) as session:
+        thing = session.get(Thing, thing_id)
+        session.delete(thing)
+        session.commit()
+        return(thing_id)
 
 @app.get("/thing/get/{thing_id}")
 def get_thing(thing_id: uuid.UUID):
