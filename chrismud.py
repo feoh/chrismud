@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from models.player import Player
 from models.thing import Thing
 from models.location import Location
+
 import uuid
 
 
@@ -53,7 +54,7 @@ def list_players():
         return players.all()
 
 
-@app.post("/player/delete/{player_id}")
+@app.delete("/player/delete/{player_id}")
 def delete_player(player_id: uuid.UUID):
     with Session(engine) as session:
         player = session.get(Player, player_id)
@@ -76,7 +77,7 @@ def create_thing(thing_name: str):
         session.commit()
         return thing.id
 
-@app.post("/thing/delete/{thing_id}")
+@app.delete("/thing/delete/{thing_id}")
 def delete_thing(thing_id: uuid.UUID):
     with Session(engine) as session:
         thing = session.get(Thing, thing_id)
@@ -104,6 +105,14 @@ def create_location(location_name: str, description: str):
         session.add(location)
         session.commit()
         return location.id
+
+@app.delete("/location/delete/{location_id}")
+def delete_location(location_id: uuid.UUID):
+    with Session(engine) as session:
+        location = session.get(Location, location_id)
+        session.delete(location)
+        session.commit()
+        return(location_id)
 
 if __name__ == "__main__":
     engine = initialize_database()
