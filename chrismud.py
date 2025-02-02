@@ -3,6 +3,8 @@ from fastapi import FastAPI
 from models.player import Player
 from models.thing import Thing
 from models.location import Location
+from models.playerlocation import PlayerLocation
+
 
 import uuid
 
@@ -37,6 +39,11 @@ def initialize_world(engine):
 
 
 app = FastAPI()
+
+@app.get("/listroutes")
+def list_routes(app: FastAPI):
+    for route in app.routes:
+        print(route.path)
 
 @app.post("/player/create/{player_name}")
 def create_player(player_name: str):
@@ -113,6 +120,41 @@ def delete_location(location_id: uuid.UUID):
         session.delete(location)
         session.commit()
         return(location_id)
+
+@app.get("/location/get/{location_id}")
+def get_location(location_id: uuid.UUID):
+    with Session(engine) as session:
+        location = session.get(Location, location_id)
+        return location
+
+@app.get("/location/list")
+def list_locations():
+    with Session(engine) as session:
+        statement = select(Location)
+        locations = session.exec(statement)
+        return locations.all()
+
+@app.post("/playerlocation/create/{player_id}/{location_id}")
+def create_playerlocation(player_id: uuid.UUID, location_id: uuid.UUID):
+    with Session(engine) as session:
+        playerlocation = PlayerLocation(player=player_id, location=location_id)
+        session.add(playerlocation)
+        session.commit()
+        return playerlocation.id
+
+@app.delete("/playerlocation/delete/{playerlocation_id}")
+def delete_playerlocation(playerlocation_id: uuid.UUID):
+    with Session(engine) as session:
+        playerlocation = session.get(PlayerLocation, playerlocation_id)
+        session.delete(playerlocation)
+        session.commit()
+        return(playerlocation_id)
+
+@app.get("/playerlocation/get/{playerlocation_id}")
+def get_playerlocation(playerlocation_id: uuid.UUID):
+    with Session(engine) as session:
+        playerlocation = session.get(PlayerLocation, playerlocation_id)
+        return playerlocation
 
 if __name__ == "__main__":
     engine = initialize_database()
