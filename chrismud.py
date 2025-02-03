@@ -1,5 +1,5 @@
 from sqlmodel import SQLModel, create_engine, Session, select
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from models.player import Player
 from models.thing import Thing
 from models.location import Location
@@ -41,9 +41,13 @@ def initialize_world(engine):
 app = FastAPI()
 
 @app.get("/listroutes")
-def list_routes(app: FastAPI):
-    for route in app.routes:
-        print(route.path)
+# Using Request instance
+@app.get("/list-routes")
+def get_all_urls_from_request(request: Request):
+    url_list = [
+        {"path": route.path, "name": route.name} for route in request.app.routes
+    ]
+    return url_list
 
 @app.post("/player/create/{player_name}")
 def create_player(player_name: str):
