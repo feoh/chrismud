@@ -24,8 +24,8 @@ def get_session():
 
 def initialize_world(session: Session = Depends(get_session)):
     # Create the Limbo location
-    player = Player(name="Wizard")
-    session.add(player)
+    wizard = Player(name="Wizard")
+    session.add(wizard)
     session.commit()
 
     # Create a thing
@@ -39,6 +39,14 @@ def initialize_world(session: Session = Depends(get_session)):
                      """)
     session.add(limbo)
     session.commit()
+
+    wizardlocation = PlayerLocation(
+            player = wizard.id,
+            location = limbo.id,
+    )
+    session.add(wizardlocation)
+    session.commit()
+
 
 
 engine = initialize_database()

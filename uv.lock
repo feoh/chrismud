@@ -44,6 +44,11 @@ dependencies = [
     { name = "sqlmodel" },
 ]
 
+[package.dev-dependencies]
+dev = [
+    { name = "pyright" },
+]
+
 [package.metadata]
 requires-dist = [
     { name = "fastapi", extras = ["standard"], specifier = ">=0.115.8" },
@@ -51,6 +56,9 @@ requires-dist = [
     { name = "pytest", specifier = ">=8.3.4" },
     { name = "sqlmodel", specifier = ">=0.0.22" },
 ]
+
+[package.metadata.requires-dev]
+dev = [{ name = "pyright", specifier = ">=1.1.392.post0" }]
 
 [[package]]
 name = "click"
