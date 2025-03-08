@@ -4,8 +4,6 @@ from models.player import Player
 from models.thing import Thing
 from models.location import Location
 from models.playerlocation import PlayerLocation
-
-
 import uuid
 
 
