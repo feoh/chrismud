@@ -1,5 +1,5 @@
 from sqlmodel import SQLModel, create_engine, select, Session
-from fastapi import FastAPI, Request, Depends
+from fastapi import FastAPI, Request, Depends, HTTPException
 from models.player import Player
 from models.thing import Thing
 from models.location import Location
@@ -75,6 +75,8 @@ def list_players(session: Session = Depends(get_session)):
 @app.delete("/player/delete/{player_id}")
 def delete_player(player_id: uuid.UUID, session: Session = Depends(get_session)):
     player = session.get(Player, player_id)
+    if player is None:
+        raise HTTPException(status_code=404, detail="Player not found")
     session.delete(player)
     session.commit()
     return(player_id)
@@ -95,6 +97,8 @@ def create_thing(thing_name: str, session: Session = Depends(get_session)):
 @app.delete("/thing/delete/{thing_id}")
 def delete_thing(thing_id: uuid.UUID, session: Session = Depends(get_session)):
     thing = session.get(Thing, thing_id)
+    if thing is None:
+        raise HTTPException(status_code=404, detail="Thing not found")
     session.delete(thing)
     session.commit()
     return(thing_id)
@@ -120,6 +124,8 @@ def create_location(location_name: str, description: str, session: Session = Dep
 @app.delete("/location/delete/{location_id}")
 def delete_location(location_id: uuid.UUID, session: Session = Depends(get_session)):
     location = session.get(Location, location_id)
+    if location is None:
+        raise HTTPException(status_code=404, detail="Location not found")
     session.delete(location)
     session.commit()
     return(location_id)
@@ -145,6 +151,8 @@ def create_playerlocation(player_id: uuid.UUID, location_id: uuid.UUID, session:
 @app.delete("/playerlocation/delete/{playerlocation_id}")
 def delete_playerlocation(playerlocation_id: uuid.UUID, session: Session = Depends(get_session)):
     playerlocation = session.get(PlayerLocation, playerlocation_id)
+    if playerlocation is None:
+        raise HTTPException(status_code=404, detail="PlayerLocation not found")
     session.delete(playerlocation)
     session.commit()
     return(playerlocation_id)
