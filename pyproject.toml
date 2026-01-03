@@ -1,17 +1,17 @@
 [project]
 name = "chrismud"
-version = "0.1.0"
+version = "3.14.2"
 description = "An HTTP based multi user dungeon?"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "fastapi[standard]>=0.115.8",
-    "pyright>=1.1.392.post0",
+    "fastapi[standard]>=0.128.0",
     "pytest>=8.3.4",
     "sqlmodel>=0.0.22",
 ]
 
 [dependency-groups]
 dev = [
+    "basedpyright>=1.36.2",
     "pyright>=1.1.392.post0",
 ]
