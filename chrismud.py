@@ -20,35 +20,35 @@ def get_session():
     with Session(engine) as session:
         yield session
 
-def initialize_world(session: Session = Depends(get_session)):
-    # Create the Limbo location
-    wizard = Player(name="Wizard")
-    session.add(wizard)
-    session.commit()
+def initialize_world():
+    with Session(engine) as session:
+        # Create the Limbo location
+        wizard = Player(name="Wizard")
+        session.add(wizard)
+        session.commit()
 
-    # Create a thing
-    thing = Thing(name="Veeblefetzer")
-    session.add(thing)
-    session.commit()
+        # Create a thing
+        thing = Thing(name="Veeblefetzer")
+        session.add(thing)
+        session.commit()
 
-    # Create Limbo, the first location!
-    limbo = Location(name="Limbo", description="""
-                     In the beginning, there was Limbo. It is a dark,
-                     """)
-    session.add(limbo)
-    session.commit()
+        # Create Limbo, the first location!
+        limbo = Location(name="Limbo", description="""
+                         In the beginning, there was Limbo. It is a dark,
+                         """)
+        session.add(limbo)
+        session.commit()
 
-    wizardlocation = PlayerLocation(
-            player = wizard.id,
-            location = limbo.id,
-    )
-    session.add(wizardlocation)
-    session.commit()
+        wizardlocation = PlayerLocation(
+                player = wizard.id,
+                location = limbo.id,
+        )
+        session.add(wizardlocation)
+        session.commit()
 
 
 
 engine = initialize_database()
-session = get_session()
 app = FastAPI()
 
 @app.get("/listroutes")
